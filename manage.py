@@ -6,7 +6,7 @@ import sys
 
 def main():
     """Run administrative tasks."""
-    os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'EduSphere.settings')
+    os.environ.setdefault("DJANGO_SETTINGS_MODULE", "EduSphere.settings")
     try:
         from django.core.management import execute_from_command_line
     except ImportError as exc:
@@ -15,8 +15,13 @@ def main():
             "available on your PYTHONPATH environment variable? Did you "
             "forget to activate a virtual environment?"
         ) from exc
+    port = os.environ.get("PORT", "8000")
+
+    # Replace the default runserver command line argument
+    addrport = f"0.0.0.0:{port}"
+    sys.argv = ["manage.py", "runserver", addrport]
     execute_from_command_line(sys.argv)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()
