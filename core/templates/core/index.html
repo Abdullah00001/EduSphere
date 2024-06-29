@@ -1,0 +1,90 @@
+{% extends "core/base.html" %}
+{% load static %}
+{% block title_block %}Home{% endblock title_block %}
+{% block custom_header_links %}{% endblock custom_header_links %}
+
+
+{% block hero_section_block %}
+<section>
+    <div class="container mx-auto">
+        <div class="carousel w-full">
+            <div id="slide1" class="carousel-item relative w-full">
+                <img src="{% static 'images/sl_042921_42480_112.jpg' %}" class="w-full" />
+                <div class="absolute left-5 right-5 top-1/2 flex -translate-y-1/2 transform justify-between">
+                    <a href="#slide3" class="btn btn-circle">❮</a>
+                    <a href="#slide2" class="btn btn-circle">❯</a>
+                </div>
+            </div>
+            <div id="slide2" class="carousel-item relative w-full">
+                <img src="{% static 'images/black_friday_super_discount_banner_01.jpg' %}" class="w-full" />
+                <div class="absolute left-5 right-5 top-1/2 flex -translate-y-1/2 transform justify-between">
+                    <a href="#slide1" class="btn btn-circle">❮</a>
+                    <a href="#slide3" class="btn btn-circle">❯</a>
+                </div>
+            </div>
+            <div id="slide3" class="carousel-item relative w-full">
+                <img src="{% static 'images/6899308.jpg' %}" class="w-full" />
+                <div class="absolute left-5 right-5 top-1/2 flex -translate-y-1/2 transform justify-between">
+                    <a href="#slide2" class="btn btn-circle">❮</a>
+                    <a href="#slide3" class="btn btn-circle">❯</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock hero_section_block %}
+
+{% block main_section_block %}
+
+<section class="mt-[100px] mb-[50px]">
+    <div class="container mx-auto">
+        <h1 class="text-4xl text-center mb-9">Our Category</h1>
+        <div class="w-[full] flex gap-4 flex-wrap bg-[#D8EFD3] rounded-xl shadow-lg p-4">
+            {% for category in categories %}
+            <a href="{% url 'books_by_category' category.category_name %}"
+                class="px-4 py-3 rounded-md bg-lime-100">{{category.category_name}}</a>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<section class="mt-[100px] mb-[50px]">
+    <div class="container mx-auto">
+        <div class="w-full">
+            <a class="text-3xl" href="">Fiction</a>
+            <div class="mt-3 font-semibold w-full flex gap-8 p-4 rounded-lg shadow-xl justify-center items-center">
+                {% for fiction_book in fictions %}
+                <div class="card card-compact bg-transparent w-80 shadow-xl">
+                    <figure>
+                        <img class="h-80 w-72" src="{{fiction_book.book_image.url}}" alt="Shoes" />
+                    </figure>
+                    <div class="card-body">
+                        <h2 class="card-title">{{fiction_book.book_name}}</h2>
+                        <p>Quantity : {% if 0 < fiction_book.book_quantity %} <span class="text-[#91DDCF]">
+                                In-Stock | {{fiction_book.book_quantity }}
+                                </span>
+                                {% else %}
+                                <span class="text-red-500">OUT OF STOCK</span>
+                                {% endif %}</p>
+                        <p>Price : {{fiction_book.book_price}}</p>
+                        <div class="my-2">
+                            <a
+                                class="w-auto p-2 rounded-sm bg-[#95D2B3]">{{fiction_book.book_category.category_name}}</a>
+                        </div>
+                        <div class="card-actions justify-start">
+                            <a href="{% url 'car_detail' fiction_book.id %}"
+                                class="bg-[#55AD9B] px-3 py-3 rounded-md text-white">Show Details</a>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    </div>
+</section>
+
+{% endblock main_section_block %}
+
+
+{% block custom_footer_links %}{% endblock custom_footer_links %}

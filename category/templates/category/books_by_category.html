@@ -1,0 +1,41 @@
+{% extends "core/base.html" %}
+{% load static %}
+{% block title_block %}Category By Books{% endblock title_block %}
+{% block custom_header_links %}{% endblock custom_header_links %}
+
+
+{% block main_section_block %}
+<section>
+    <div class="container mx-auto">
+        <div class="w-full p-3 grid grid-cols-4 gap-4">
+            {% for book in books %}
+            <div class="card card-compact bg-transparent w-full shadow-xl">
+                <figure>
+                    <img class="h-80 w-72" src="{{book.book_image.url}}" alt="Shoes" />
+                </figure>
+                <div class="card-body">
+                    <h2 class="card-title">{{book.book_name}}</h2>
+                    <p>Quantity : {% if 0 < book.book_quantity %} <span class="text-[#91DDCF]">
+                            In-Stock | {{book.book_quantity }}
+                            </span>
+                            {% else %}
+                            <span class="text-red-500">OUT OF STOCK</span>
+                            {% endif %}</p>
+                    <p>Price : {{book.book_price}}</p>
+                    <div class="my-2">
+                        <a class="w-auto p-2 rounded-sm bg-[#95D2B3]">{{book.book_category.category_name}}</a>
+                    </div>
+                    <div class="card-actions justify-start">
+                        <a href="{% url 'car_detail' book.id %}"
+                            class="bg-[#55AD9B] px-3 py-3 rounded-md text-white">Show Details</a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endblock main_section_block %}
+
+
+{% block custom_footer_links %}{% endblock custom_footer_links %}

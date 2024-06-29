@@ -1,0 +1,119 @@
+{% extends "core/base.html" %}
+{% load static %}
+{% block title_block %}Book Details{% endblock title_block %}
+{% block custom_header_links %}{% endblock custom_header_links %}
+
+{% block main_section_block %}
+
+<section>
+    <div class="container mx-auto">
+        <div class="w-[800px] mx-auto flex justify-start gap-3 p-4">
+            <div class="w-[40%]">
+                <img src="{{book_details.book_image.url}}" alt="Book Image" class="w-full h-80 rounded-lg">
+            </div>
+            <div class="w-[60%]">
+                <h3 class="text-2xl font-semibold text-gray-800 mb-2">{{ book_details.book_title }}</h3>
+                <p class="text-gray-600 mb-4">by {{ book_details.book_publisher }}</p>
+                <p class="mb-4">Category : {{ book_details.book_category.category_name }}</p>
+                <p class="mb-4">
+                    {% if 0 < book_details.book_quantity %} <span class="text-[#91DDCF]">
+                        In-Stock | {{book_details.book_quantity }}
+                        </span>
+                        {% else %}
+                        <span class="text-red-500">OUT OF STOCK</span>
+                        {% endif %}
+                </p>
+                <p class="text-xl font-medium text-gray-900">Price : ${{ book_details.book_price }}</p>
+                {% if user.is_authenticated %}
+                <div class=" mt-4">
+                    {% if flag %}
+                    <a href="{% url 'return' book_details.id %}" class="bg-[#55AD9B] px-4 py-3 rounded-md">Return</a>
+                    {% else %}
+                    <a href="{% url 'borrow' book_details.id %}" class="bg-[#55AD9B]  px-4 py-3 rounded-md">Borrow</a>
+                    {% endif %}
+                </div>
+                {% endif %}
+            </div>
+        </div>
+        <div class="w-[800px] mx-auto  bg-transaparent p-6 rounded-lg shadow-lg">
+            <h1 class="text-2xl font-semibold text-gray-800 mb-6">Book Specification</h1>
+            <div class="space-y-4">
+                <div class="bg-gray-50 p-4 rounded-lg">
+                    <h2 class="text-lg font-medium text-gray-700">Title: <span
+                            class="text-gray-900 font-normal">{{book_details.book_title}}</span></h2>
+                </div>
+                <div class="bg-gray-50 p-4 rounded-lg">
+                    <h2 class="text-lg font-medium text-gray-700">Description:</h2>
+                    <p class="text-gray-900">{{ book_details.book_description }}</p>
+                </div>
+                <div class="bg-gray-50 p-4 rounded-lg">
+                    <h2 class="text-lg font-medium text-gray-700">Book Edition: <span
+                            class="text-gray-900 font-normal">{{ book_details.book_edision }}</span></h2>
+                </div>
+                <div class="bg-gray-50 p-4 rounded-lg">
+                    <h2 class="text-lg font-medium text-gray-700">Number of Pages: <span
+                            class="text-gray-900 font-normal">{{ book_details.number_of_pages }}</span></h2>
+                </div>
+                <div class="bg-gray-50 p-4 rounded-lg">
+                    <h2 class="text-lg font-medium text-gray-700">Book Language: <span
+                            class="text-gray-900 font-normal">{{ book_details.book_language }}</span></h2>
+                </div>
+                <div class="bg-gray-50 p-4 rounded-lg">
+                    <h2 class="text-lg font-medium text-gray-700">Country: <span
+                            class="text-gray-900 font-normal">{{book_details.book_origin }}</span></h2>
+                </div>
+            </div>
+        </div>
+        <div class="w-[800px] mx-auto  bg-transaparent mt-3 flex gap-3">
+
+            <button class="btn bg-[#55AD9B]" onclick="my_modal_1.showModal()">Reviews</button>
+            {% if user.is_authenticated %}
+            {% if flag %}
+            <button class="btn bg-[#55AD9B]" onclick="my_modal_3.showModal()">Write Review</button>
+            {% endif %}
+            {% endif %}
+        </div>
+        <dialog id="my_modal_3" class="modal">
+            <div class="modal-box">
+                <form method="dialog">
+                    <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
+                </form>
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="mb-4">
+                        <label for="id_reveiw_body" class="block text-gray-700 text-sm font-bold mb-2">Review</label>
+                        {{ ReviewForm.reveiw_body }}
+                    </div>
+                    <button type="submit" class="bg-[#55AD9B] px-4 py-3 rounded-md">Post</button>
+                </form>
+            </div>
+        </dialog>
+        <dialog id="my_modal_1" class="modal">
+            <div class="modal-box">
+                <h1 class="mb-2 text-lg">Reviews</h1>
+                {% if reviews %}
+                {% for review in reviews %}
+                <div class="p-3 rounded-sm shadow-lg">
+                    <h3>{{review.user.username}}</h3>
+                    <small>{{review.review_creation_time}}</small>
+                    <p>{{review.reveiw_body}}</p>
+                </div>
+                {% endfor %}
+                {% else %}
+                <p>No Comment Yet</p>
+                {% endif %}
+
+                <div class="modal-action">
+                    <form method="dialog">
+                        <!-- if there is a button in form, it will close the modal -->
+                        <button class="btn">Close</button>
+                    </form>
+                </div>
+            </div>
+        </dialog>
+    </div>
+</section>
+
+{% endblock main_section_block %}
+
+{% block custom_footer_links %}{% endblock custom_footer_links %}

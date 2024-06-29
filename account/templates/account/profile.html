@@ -1,0 +1,143 @@
+{% extends "core/base.html" %}
+{% load static %}
+{% block title_block %}Profile{% endblock title_block %}
+{% block custom_header_links %}{% endblock custom_header_links %}
+
+{% block main_section_block %}
+<section>
+    <div class="container mx-auto p-4">
+        <div class="grid grid-cols-12 gap-3">
+            <div class="col-span-2 flex flex-col gap-3">
+                <div class="w-ful p-2 border-2 border-sky-300 rounded-md">
+                    <h3 class="mb-1">Hello<br>{{user.first_name}} {{user.last_name}}</h3>
+                    <h3>Balance : {{user.profile_info.balance}}</h3>
+                    <div class="mt-5 pb-2">
+                        <a class="px-5 py-3 rounded-md bg-[#55AD9B]" href="{% url 'deposit_money' %}">Deposite</a>
+                        <a class="px-5 py-3 rounded-md bg-[#55AD9B]" href="{% url 'withdraw_money' %}">Withdraw</a>
+                    </div>
+                </div>
+                <div class="w-full p-2 border-2 border-sky-300 rounded-md">
+                    <ul class="flex flex-col gap-2">
+                        <li><a href="{% url 'profile' 'account' %}">Account</a></li>
+                        <li><a href="{% url 'profile' 'borrow' %}">Borrow History</a></li>
+                        <li><a href="{% url 'profile' 'return' %}">Return History</a></li>
+                        <li><a href="{% url 'profile' 'transactions' %}">Transactions History</a></li>
+                        <li><a href="{% url 'profile' 'reviews' %}">Your Riviews</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-span-10">
+                {% if flag == 'account' %}
+                <div class="w-ful p-2 border-2 border-sky-300 rounded-md">
+                    <div class="mb-3 shadow-lg bg-transparent rounded-md p-2">
+                        <h1>Personal Information</h1>
+                        <h3>Name : {{user.first_name}} {{user.last_name}}</h3>
+                        <h3>Username : {{user.first_name}}</h3>
+                        <h3>Birth Date : {{user.profile_info.birth_date}}</h3>
+                        <h3>Gender : {{user.profile_info.gender}}</h3>
+                    </div>
+                    <div class="mb-3 shadow-lg bg-transparent rounded-md p-2">
+                        <h1>Email Address</h1>
+                        <h3>Email : {{user.email}}</h3>
+                    </div>
+
+                    <div class="mb-3 shadow-lg bg-transparent rounded-md p-2">
+                        <h1>Address</h1>
+                        <h3>Street : {{user.profile_info.street}}</h3>
+                        <h3>Post Code : {{user.profile_info.post_code}}</h3>
+                        <h3>City : {{user.profile_info.city}}</h3>
+                        <h3>Country : {{user.profile_info.country}}</h3>
+                    </div>
+                </div>
+                {% elif flag == 'borrow' %}
+                <div class="w-ful p-2 border-2 border-sky-300 rounded-md">
+                    <h1>Borrow History</h1>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Book Name</th>
+                                <th>Borrow Time</th>
+                                <th>Price</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for borrowed_book in borrowed_books %}
+                            <tr>
+                                <th>{{borrowed_book.book.book_name}}</th>
+                                <td>{{borrowed_book.borrow_time}}</td>
+                                <td>{{borrowed_book.book.book_price}}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% elif flag == 'return' %}
+                <div class="w-ful p-2 border-2 border-sky-300 rounded-md">
+                    <h1>Return History</h1>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Book Name</th>
+                                <th>Return Time</th>
+                                <th>Price</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for returned_book in returned_books %}
+                            <tr>
+                                <th>{{returned_book.book.book_name}}</th>
+                                <td>{{returned_book.return_time}}</td>
+                                <td>{{returned_book.book.book_price}}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% elif flag == 'transactions' %}
+                <div class="w-ful p-2 border-2 border-sky-300 rounded-md">
+                    <h1>Transaction History</h1>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Transaction Type</th>
+                                <th>Transaction Time</th>
+                                <th>Transaction Ammount</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for transaction in transactions %}
+                            <tr>
+                                <th>{{transaction.transaction_type}}</th>
+                                <td>{{transaction.transaction_time}}</td>
+                                <td>{{transaction.transaction_amount}}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% elif flag == 'reviews' %}
+                <div class="w-ful p-2 border-2 border-sky-300 rounded-md">
+                    <h1>Reviews History</h1>
+                    <div class="p-3 overflow-y-scroll">
+                        {% for review in reviews %}
+                        <div
+                            class="max-w-md mx-auto bg-transparent rounded-xl shadow-md overflow-hidden md:max-w-2xl my-8">
+                            <div class="p-4">
+                                <div class="text-xl font-medium text-black">{{review.user.username}}</div>
+                                <div class="text-gray-500">{{review.review_creation_time}}</div>
+                                <div class="mt-4 text-gray-700">
+                                    {{review.reveiw_body}}
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock main_section_block %}
+
+{% block custom_footer_links %}{% endblock custom_footer_links %}
